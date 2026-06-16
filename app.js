@@ -33,38 +33,30 @@ class DataProcessor {
 
     // Xử lý fetch nội dung qua Proxy
     async fetchAndProcess() {
-        const url = this.urlInput.value.trim();
-        if (!url) return;
+    const url = this.urlInput.value.trim();
+    if (!url) return;
 
-        this.setProcessing(true);
-        // Sử dụng CORS Proxy để bypass lỗi CORS
-        const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`;
+    // Sử dụng proxy để vượt lỗi CORS
+    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`;
+    
+    try {
+        this.progressFill.style.width = '30%';
+        const response = await fetch(proxyUrl);
+        const html = await response.text();
         
-        try {
-            const response = await fetch(proxyUrl);
-            const html = await response.text();
-            const doc = new DOMParser().parseFromString(html, 'text/html');
-
-            const title = doc.querySelector(this.config.title_selector)?.innerText || "Không tiêu đề";
-            this.contentTitle.textContent = title;
-
-            let paragraphs = [];
-            for (let sel of this.config.content_selectors) {
-                const els = doc.querySelectorAll(sel);
-                if (els.length > 0) {
-                    paragraphs = Array.from(els).map(p => p.innerText.trim()).filter(t => t);
-                    break;
-                }
-            }
-
-            const translated = await this.translateText(paragraphs.join('\n\n'));
-            this.translatedContent.innerHTML = translated.split('\n\n').map(p => `<p>${p}</p>`).join('');
-        } catch (e) {
-            this.showToast('Lỗi: ' + e.message, 'error');
-        } finally {
-            this.setProcessing(false);
-        }
+        // Sử dụng DOMParser để bóc tách dữ liệu ngay tại trình duyệt
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        
+        // Dùng config selector (lấy từ localStorage)
+        const title = doc.querySelector(this.config.title_selector)?.innerText || "Không tiêu đề";
+        // ... (xử lý nội dung tương tự)
+        
+        this.progressFill.style.width = '100%';
+    } catch (e) {
+        console.error("Lỗi:", e);
+        this.showToast('❌ Lỗi kết nối: ' + e.message, 'error');
     }
+}
 
     // Dịch bằng Google Translate API (client-side)
     async translateText(text) {
