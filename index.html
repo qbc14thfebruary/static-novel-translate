@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Processor Static</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="app">
+        <header class="app-header">
+            <div class="header-content">
+                <i class="fas fa-database header-icon"></i>
+                <h1>DATA PROCESSOR (STATIC)</h1>
+            </div>
+        </header>
+        <div class="control-bar">
+            <div class="url-row">
+                <input type="url" id="urlInput" placeholder="Nhập URL..." class="url-input">
+                <button id="processBtn" class="btn btn-primary">Dịch</button>
+            </div>
+            <div class="nav-row">
+                <button id="prevBtn" class="btn btn-secondary">Trước</button>
+                <div class="nav-status"><span id="chapterDisplay">Chương: --</span></div>
+                <button id="nextBtn" class="btn btn-secondary">Sau</button>
+            </div>
+        </div>
+        <main class="content-area">
+            <div class="progress-container"><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+            <div class="content-display">
+                <div class="content-header"><span id="contentTitle">Nội dung</span></div>
+                <div id="translatedContent" class="translated-text"></div>
+            </div>
+        </main>
+        <div id="configOverlay" class="config-overlay">
+            <div class="config-modal">
+                <textarea id="configEditor" class="config-editor"></textarea>
+                <button id="saveConfigBtn">Lưu Config</button>
+            </div>
+        </div>
+        <div id="toast" class="toast"></div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
